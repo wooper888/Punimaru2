@@ -22,4 +22,14 @@ public class Ball : MonoBehaviour
         //エフェクトの破壊
         Destroy(explosion, 0.2f); //0.2秒後に破壊する
     }
+
+    //ボールの種類がボムの場合
+    public bool IsBomb()
+    {
+        if (id == -1)
+        {
+            return true;
+        }
+        return false;
+    }
 }

@@ -8,7 +8,8 @@ public class ParamsSO : ScriptableObject
     [Header("初期のボールの数")]
     public int initBallCount;
 
-
+    [Header("ボムの範囲")]
+    public float bombRange;
 
 
     //以下ParamsSOの便利設定

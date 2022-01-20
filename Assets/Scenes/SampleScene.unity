@@ -576,6 +576,7 @@ MonoBehaviour:
   ballGenerator: {fileID: 217081086}
   removeBalls: []
   scoreText: {fileID: 1894305411}
+  pointEffectPrefab: {fileID: 4017660059627939038, guid: e674d3647d84b4642a549e46e44c97d8, type: 3}
 --- !u!4 &1060348056
 Transform:
   m_ObjectHideFlags: 0

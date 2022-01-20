@@ -26,7 +26,7 @@ public class BallGenerator : MonoBehaviour
             int ballID = Random.Range(0, ballSprites.Length);
 
             //ボムの生成
-            if (Random.Range(0, 100) < 30)　//何％の確率でボムを生成するか
+            if (Random.Range(0, 100) < 5)　//何％の確率でボムを生成するか
             {
                 ballID = -1;
                 ball.GetComponent<SpriteRenderer>().sprite = bombSprite; //ボムの画像を表示

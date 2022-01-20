@@ -24,6 +24,10 @@ public class GameSystem : MonoBehaviour
     //スコアを入れる枠
     [SerializeField] Text scoreText = default;
 
+    //ポイントエフェクトのPrefabを入れる枠
+    [SerializeField] GameObject pointEffectPrefab = default;
+
+
 
     void Start()
     {
@@ -61,11 +65,21 @@ public class GameSystem : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
         if (hit && hit.collider.GetComponent<Ball>())
         {
-            Debug.Log("オブジェクトにヒットしたよ！");
             //ヒットしたボールをリストに追加する
             Ball ball = hit.collider.GetComponent<Ball>();
-            AddRemoveBall(ball);
-            isDragging = true;
+
+            //ボールの種類を判定
+            if (ball.IsBomb())
+            {
+                //ボムなら爆破
+                BombExplosion(ball);
+            }
+            else
+            {
+                //ボムじゃなければリストに追加
+                AddRemoveBall(ball);
+                isDragging = true;
+            }
         }
     }
 
@@ -96,7 +110,7 @@ public class GameSystem : MonoBehaviour
     void OnDragEnd()
     {
         //リストに追加したボールを削除する
-        int removeCount = removeBalls.Count; //リストに追加したボールの数を数える
+        int removeCount = removeBalls.Count; //リストに追加したボールの数を数えるc
 
         //リストに追加したボールが３個以上なら削除する
         if (removeCount >= 3)
@@ -106,7 +120,9 @@ public class GameSystem : MonoBehaviour
                 removeBalls[i].Explosion(); //爆破エフェクトとボールの破壊
             }
             StartCoroutine(ballGenerator.Spawns(removeCount)); //消した分だけボールを生成する
-            AddScore(removeCount * 100); //スコアを計算して表示
+            int score = removeCount * 100; //スコアを計算
+            AddScore(score); //スコアを表示
+            SpawnPointEffect(removeBalls[removeBalls.Count-1].transform.position, score); //ポイントエフェクトの表示
         }
 
         //リストに追加したボールのサイズと色を元に戻す
@@ -141,5 +157,47 @@ public class GameSystem : MonoBehaviour
     {
         score += point;
         scoreText.text = score.ToString();
+    }
+
+    //ボムによる爆破
+    void BombExplosion(Ball bomb)
+    {
+        //爆破リストの作成
+        List<Ball> explosionList = new List<Ball>();
+
+        //ボムを中心に爆破するボールを集める
+        Collider2D[] hitObj = Physics2D.OverlapCircleAll(bomb.transform.position, ParamsSO.Entity.bombRange);
+
+        for (int i = 0; i < hitObj.Length; i++)
+        {
+            //ボールかどうか判定する
+            Ball ball = hitObj[i].GetComponent<Ball>();
+            if (ball)
+            {
+                explosionList.Add(ball); //ボールなら爆破リストに追加する
+            }
+        }
+        //爆破する
+        int removeCount = explosionList.Count; //リストに追加したボールの数を数える
+
+        for (int i = 0; i < removeCount; i++)
+        {
+            explosionList[i].Explosion(); //爆破
+        }
+        StartCoroutine(ballGenerator.Spawns(removeCount)); //消した分だけボールを生成する
+        int score = removeCount * 100; //スコアの計算
+        AddScore(score); //スコアを表示
+        SpawnPointEffect(bomb.transform.position, score); //ポイントエフェクトの表示
+    }
+
+    //ポイントエフェクトを生成する
+    void SpawnPointEffect(Vector2 position, int score)
+    {
+        //ポイントエフェクトを生成して変数に入れる
+        GameObject effectObj =  Instantiate(pointEffectPrefab, position, Quaternion.identity);
+        //エフェクトのクラスを取得
+        PointEffect pointEffect = effectObj.GetComponent<PointEffect>();
+        //エフェクトの取得
+        pointEffect.Show(score);
     }
 }
