@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameSystem : MonoBehaviour
 {
@@ -17,10 +18,18 @@ public class GameSystem : MonoBehaviour
     //触れているボール(最後に追加したボール)
     Ball currentDraggingBall;
 
+    //スコア
+    int score;
+
+    //スコアを入れる枠
+    [SerializeField] Text scoreText = default;
+
 
     void Start()
     {
-        StartCoroutine(ballGenerator.Spawns(40));
+        score = 0; //スコアの初期化
+        AddScore(0); //スコアの表示
+        StartCoroutine(ballGenerator.Spawns(ParamsSO.Entity.initBallCount));
     }
 
 
@@ -94,10 +103,19 @@ public class GameSystem : MonoBehaviour
         {
             for (int i = 0; i < removeCount; i++)
             {
-                Destroy(removeBalls[i].gameObject);
+                removeBalls[i].Explosion(); //爆破エフェクトとボールの破壊
             }
-            StartCoroutine(ballGenerator.Spawns(removeCount));
+            StartCoroutine(ballGenerator.Spawns(removeCount)); //消した分だけボールを生成する
+            AddScore(removeCount * 100); //スコアを計算して表示
         }
+
+        //リストに追加したボールのサイズと色を元に戻す
+        for (int i = 0; i < removeCount; i++)
+        {
+            removeBalls[i].transform.localScale = Vector3.one * 3;
+            removeBalls[i].GetComponent<SpriteRenderer>().color = Color.white;
+        }
+
         removeBalls.Clear();
         isDragging = false;
 
@@ -112,7 +130,16 @@ public class GameSystem : MonoBehaviour
         //未追加のボールであれば追加する
         if (removeBalls.Contains(ball) == false)
         {
+            ball.transform.localScale = Vector3.one * 3 * 1.4f;　//ボールの大きさを大きくする
+            ball.GetComponent<SpriteRenderer>().color = Color.yellow;　//ボールの色を変える
             removeBalls.Add(ball);
         }
+    }
+
+    //スコアの表示
+    void AddScore(int point)
+    {
+        score += point;
+        scoreText.text = score.ToString();
     }
 }
