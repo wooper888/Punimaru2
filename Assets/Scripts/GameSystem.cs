@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameSystem : MonoBehaviour
 {
@@ -27,13 +28,25 @@ public class GameSystem : MonoBehaviour
     //ポイントエフェクトのPrefabを入れる枠
     [SerializeField] GameObject pointEffectPrefab = default;
 
+    //タイマーテキストを入れるための枠
+    [SerializeField] Text timerText = default;
+
+    //タイマー
+    int timeCount;
+
+    //リザルトパネルを表示する枠
+    [SerializeField] GameObject resultPanel = default;
+
+
 
 
     void Start()
     {
+        timeCount = 5; //タイマーの初期値
         score = 0; //スコアの初期化
         AddScore(0); //スコアの表示
-        StartCoroutine(ballGenerator.Spawns(ParamsSO.Entity.initBallCount));
+        StartCoroutine(ballGenerator.Spawns(ParamsSO.Entity.initBallCount)); //初期のボール生成
+        StartCoroutine(CountDown()); //カウントダウンタイマー
     }
 
 
@@ -200,4 +213,30 @@ public class GameSystem : MonoBehaviour
         //エフェクトの取得
         pointEffect.Show(score);
     }
+
+    //カウントダウンタイマー
+    IEnumerator CountDown()
+    {
+        //１秒ごとにタイマーの表示を減らしていく
+        while (timeCount > 0)
+        {
+            yield return new WaitForSeconds(1);
+            timeCount--;
+            timerText.text = timeCount.ToString();
+        }
+        Debug.Log("タイムアップ");
+
+        //リザルトパネルを表示する
+        resultPanel.SetActive(true);
+    }
+
+    //リトライ機能
+    public void OnRetryButton()
+    {
+        //同じシーンを再読み込みする
+        SceneManager.LoadScene("Gamescene");
+    }
+
+
+
 }
