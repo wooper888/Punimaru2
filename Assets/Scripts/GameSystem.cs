@@ -31,18 +31,19 @@ public class GameSystem : MonoBehaviour
     //タイマーテキストを入れるための枠
     [SerializeField] Text timerText = default;
 
-    //タイマー
+    //タイマー　
     int timeCount;
 
     //リザルトパネルを表示する枠
     [SerializeField] GameObject resultPanel = default;
 
-
+    //ゲームオーバーの判定
+    bool gameOver;
 
 
     void Start()
     {
-        timeCount = 5; //タイマーの初期値
+        timeCount = 60; //タイマーの初期値
         score = 0; //スコアの初期化
         AddScore(0); //スコアの表示
         StartCoroutine(ballGenerator.Spawns(ParamsSO.Entity.initBallCount)); //初期のボール生成
@@ -52,7 +53,13 @@ public class GameSystem : MonoBehaviour
 
     void Update()
     {
+        //ゲームオーバーの処理
+        if (gameOver)
+        {
+            return;  //この関数での処理をここで終わらせる
+        }
 
+        //指の動き
         if (Input.GetMouseButtonDown(0))
         {
             //右クリックを押し込んだ時
@@ -133,7 +140,19 @@ public class GameSystem : MonoBehaviour
                 removeBalls[i].Explosion(); //爆破エフェクトとボールの破壊
             }
             StartCoroutine(ballGenerator.Spawns(removeCount)); //消した分だけボールを生成する
-            int score = removeCount * 100; //スコアを計算
+
+            //スコアを計算
+            int score = 0;
+
+            if(removeCount > 3)
+            {
+                score = removeCount * 100 + removeCount * removeCount * 10;
+            }
+            else
+            {
+                score = removeCount * 100;
+            }
+
             AddScore(score); //スコアを表示
             SpawnPointEffect(removeBalls[removeBalls.Count-1].transform.position, score); //ポイントエフェクトの表示
         }
@@ -198,7 +217,19 @@ public class GameSystem : MonoBehaviour
             explosionList[i].Explosion(); //爆破
         }
         StartCoroutine(ballGenerator.Spawns(removeCount)); //消した分だけボールを生成する
-        int score = removeCount * 100; //スコアの計算
+
+        //スコアを計算
+        int score = 0;
+
+        if (removeCount > 3)
+        {
+            score = removeCount * 100 + removeCount * removeCount * 10;
+        }
+        else
+        {
+            score = removeCount * 100;
+        }
+
         AddScore(score); //スコアを表示
         SpawnPointEffect(bomb.transform.position, score); //ポイントエフェクトの表示
     }
@@ -225,6 +256,9 @@ public class GameSystem : MonoBehaviour
             timerText.text = timeCount.ToString();
         }
         Debug.Log("タイムアップ");
+
+        //ゲームオーバーの判定をtrueにする
+        gameOver = true;
 
         //リザルトパネルを表示する
         resultPanel.SetActive(true);
