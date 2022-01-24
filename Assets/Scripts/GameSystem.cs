@@ -40,6 +40,10 @@ public class GameSystem : MonoBehaviour
     //ゲームオーバーの判定
     bool gameOver;
 
+    //一時停止の判定
+    bool isPause;
+
+
 
     void Start()
     {
@@ -269,6 +273,23 @@ public class GameSystem : MonoBehaviour
     {
         //同じシーンを再読み込みする
         SceneManager.LoadScene("Gamescene");
+    }
+
+    //ポーズボタンが押された時の処理
+    public void OnPauseButton()
+    {
+        if (isPause)
+        {
+            Time.timeScale = 1;
+            isPause = false;
+            gameOver = false; //Update関数内を無効にして操作不可にする
+        }
+        else
+        {
+            Time.timeScale = 0;
+            isPause = true;
+            gameOver = true; //Update関数内を有効に戻す
+        }
     }
 
 
