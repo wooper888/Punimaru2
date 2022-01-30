@@ -47,6 +47,7 @@ public class GameSystem : MonoBehaviour
 
     void Start()
     {
+        SoundManager.instance.PlayBGM(SoundManager.BGM.GameSceneBGM);
         timeCount = 60; //タイマーの初期値
         score = 0; //スコアの初期化
         AddScore(0); //スコアの表示
@@ -159,6 +160,7 @@ public class GameSystem : MonoBehaviour
 
             AddScore(score); //スコアを表示
             SpawnPointEffect(removeBalls[removeBalls.Count-1].transform.position, score); //ポイントエフェクトの表示
+            SoundManager.instance.PlaySE(SoundManager.SE.Destroy); //SE
         }
 
         //リストに追加したボールのサイズと色を元に戻す
@@ -173,7 +175,7 @@ public class GameSystem : MonoBehaviour
 
     }
 
-    //すでにドラッグしているボールを再追加しないようにする処理
+    //ボールの追加とすでにドラッグしているボールを再追加しないようにする処理
     void AddRemoveBall(Ball ball)
     {
         //現在触れているボール(最後に追加したボール)
@@ -185,6 +187,9 @@ public class GameSystem : MonoBehaviour
             ball.transform.localScale = Vector3.one * 3 * 1.4f;　//ボールの大きさを大きくする
             ball.GetComponent<SpriteRenderer>().color = Color.yellow;　//ボールの色を変える
             removeBalls.Add(ball);
+            //SEを鳴らす
+            SoundManager.instance.PlaySE(SoundManager.SE.Touch);
+
         }
     }
 
