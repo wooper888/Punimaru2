@@ -41,7 +41,10 @@ public class GameSystem : MonoBehaviour
     bool gameOver;
 
     //一時停止の判定
-    bool isPause;
+//    bool isPause;
+
+    //一時停止中のパネルを表示する枠
+    [SerializeField] GameObject settingPanel = default;
 
 
 
@@ -283,18 +286,33 @@ public class GameSystem : MonoBehaviour
     //ポーズボタンが押された時の処理
     public void OnPauseButton()
     {
-        if (isPause)
-        {
-            Time.timeScale = 1;
-            isPause = false;
-            gameOver = false; //Update関数内を無効にして操作不可にする
-        }
-        else
-        {
-            Time.timeScale = 0;
-            isPause = true;
-            gameOver = true; //Update関数内を有効に戻す
-        }
+        //一時停止のパネルを表示する
+        settingPanel.SetActive(true);
+        //タイマーを停止
+        Time.timeScale = 0;
+    //    isPause = true;
+        gameOver = true; //Update関数内を無効にして操作不可にする
+    }
+
+    //続けるボタンが押された時の処理
+    public void OnContinueButton()
+    {
+        //一時停止パネルを非表示にする
+        settingPanel.SetActive(false);
+        //タイマー再開
+        Time.timeScale = 1;
+    //    isPause = false;
+        gameOver = false; //Update関数内を有効に戻す
+
+    }
+
+    //やめるボタンが押された時の処理
+    public void OnEndButton()
+    {
+        SceneManager.LoadScene("TitleScene");
+        SoundManager.instance.PlayBGM(SoundManager.BGM.TitleSceneBGM);
+        gameOver = false; //Update関数内を有効に戻す
+        Time.timeScale = 1;
     }
 
 
