@@ -27,7 +27,9 @@ public class SoundManager : MonoBehaviour
     public enum SE
     {
         Touch,
-        Destroy
+        Destroy,
+        Countdown,
+        Bomb
     }
 
     //シングルトン

@@ -50,7 +50,7 @@ public class GameSystem : MonoBehaviour
     void Start()
     {
         SoundManager.instance.PlayBGM(SoundManager.BGM.GameSceneBGM);
-        timeCount = 60; //タイマーの初期値
+        timeCount = 10; //タイマーの初期値
         score = 0; //スコアの初期化
         AddScore(0); //スコアの表示
         StartCoroutine(ballGenerator.Spawns(ParamsSO.Entity.initBallCount)); //初期のボール生成
@@ -220,6 +220,10 @@ public class GameSystem : MonoBehaviour
                 explosionList.Add(ball); //ボールなら爆破リストに追加する
             }
         }
+
+        //SEを鳴らす
+        SoundManager.instance.PlaySE(SoundManager.SE.Bomb);
+
         //爆破する
         int removeCount = explosionList.Count; //リストに追加したボールの数を数える
 
@@ -265,8 +269,14 @@ public class GameSystem : MonoBehaviour
             yield return new WaitForSeconds(1);
             timeCount--;
             timerText.text = timeCount.ToString();
+
+            if (timeCount <= 5)
+            {
+                timerText.color = Color.red;
+                //SEを鳴らす
+                SoundManager.instance.PlaySE(SoundManager.SE.Countdown);
+            }
         }
-        Debug.Log("タイムアップ");
 
         //ゲームオーバーの判定をtrueにする
         gameOver = true;

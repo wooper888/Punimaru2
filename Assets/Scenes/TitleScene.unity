@@ -973,6 +973,8 @@ MonoBehaviour:
   seClips:
   - {fileID: 8300000, guid: eab55f131b4bb4fc185a4933ad648d33, type: 3}
   - {fileID: 8300000, guid: 557a1ffe843624f3991248585fb63c12, type: 3}
+  - {fileID: 8300000, guid: 9773d233f890e4f4faf4d3b282ff08e5, type: 3}
+  - {fileID: 8300000, guid: 76584988ab718491e95c2e93a84fd59c, type: 3}
 --- !u!4 &2119092716
 Transform:
   m_ObjectHideFlags: 0
