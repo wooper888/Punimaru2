@@ -47,7 +47,6 @@ public class GameSystem : MonoBehaviour
     [SerializeField] GameObject settingPanel = default;
 
 
-
     void Start()
     {
         SoundManager.instance.PlayBGM(SoundManager.BGM.GameSceneBGM);
