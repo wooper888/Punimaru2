@@ -51,6 +51,7 @@ public class SoundManager : MonoBehaviour
     private void Start()
     {
         SoundManager.instance.PlayBGM(SoundManager.BGM.TitleSceneBGM);
+        Debug.Log("サウンドマネージャーが読み込まれました");
     }
 
     //BGMの設定
@@ -66,11 +67,21 @@ public class SoundManager : MonoBehaviour
         audioSourceSE.PlayOneShot(seClips[(int)se]);
     }
 
-    //音の設定
-    public void OnSoundButton()
+    //SoundOnButtonを押下した時
+    public void OnSoundOnButton()
     {
-        audioSourceBGM.mute = !audioSourceBGM.mute;
-        audioSourceSE.mute = !audioSourceSE.mute;
+        audioSourceBGM.mute = false;
+        audioSourceSE.mute = false;
+        Debug.Log("サウンドON");
+
+    }
+
+    //SoundOffButtonを押下した時
+    public void OnSoundOffButton()
+    {
+        audioSourceBGM.mute = true;
+        audioSourceSE.mute = true;
+        Debug.Log("サウンドOFF");
 
     }
 }

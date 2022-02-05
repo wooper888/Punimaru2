@@ -22,6 +22,9 @@ public class Title : MonoBehaviour
     //あそびかた４を表示する枠
     [SerializeField] GameObject houTo4Image = default;
 
+    //SoundSettingButtonを設定する枠
+    [SerializeField] GameObject soundSettingPanel = default;
+
     //スタートボタンを押下したらゲームシーンに遷移
     public void OnStartButton()
     {
@@ -80,9 +83,21 @@ public class Title : MonoBehaviour
         houTo4Image.SetActive(false);
     }
 
-    //とじるボタンを押下したらHowToPanelを閉じる
+    //あそびかたのとじるボタンを押下したらHowToPanelを閉じる
     public void OnCloseButton()
     {
         houToPanel.SetActive(false);
+    }
+
+    //せっていボタンを押下したらSoundパネルを表示する
+    public void OnSoundSettingButton()
+    {
+        soundSettingPanel.SetActive(true);
+    }
+
+    //せっていのとじるボタンを押下したらSoundSettingPanelを閉じる
+    public void OnCloseSoundPanelButton()
+    {
+        soundSettingPanel.SetActive(false);
     }
 }
