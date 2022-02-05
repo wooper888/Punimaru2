@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e580d86d4aa47f09033dafed7ae0dc, type: 3}
   m_Name: ParamsSO
   m_EditorClassIdentifier: 
-  initBallCount: 60
+  initBallCount: 50
   bombRange: 0.8

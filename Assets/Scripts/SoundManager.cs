@@ -65,4 +65,12 @@ public class SoundManager : MonoBehaviour
     {
         audioSourceSE.PlayOneShot(seClips[(int)se]);
     }
+
+    //音の設定
+    public void OnSoundButton()
+    {
+        audioSourceBGM.mute = !audioSourceBGM.mute;
+        audioSourceSE.mute = !audioSourceSE.mute;
+
+    }
 }

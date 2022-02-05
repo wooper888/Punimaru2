@@ -50,7 +50,7 @@ public class GameSystem : MonoBehaviour
     void Start()
     {
         SoundManager.instance.PlayBGM(SoundManager.BGM.GameSceneBGM);
-        timeCount = 10; //タイマーの初期値
+        timeCount = 30; //タイマーの初期値
         score = 0; //スコアの初期化
         AddScore(0); //スコアの表示
         StartCoroutine(ballGenerator.Spawns(ParamsSO.Entity.initBallCount)); //初期のボール生成
@@ -125,7 +125,7 @@ public class GameSystem : MonoBehaviour
             if (ball.id == currentDraggingBall.id)
             {
                 float distance = Vector2.Distance(ball.transform.position, currentDraggingBall.transform.position);
-                if (distance < 1.0)
+                if (distance < 1.2f)
                 {
                     AddRemoveBall(ball);
                 }
@@ -168,7 +168,7 @@ public class GameSystem : MonoBehaviour
         //リストに追加したボールのサイズと色を元に戻す
         for (int i = 0; i < removeCount; i++)
         {
-            removeBalls[i].transform.localScale = Vector3.one * 3;
+            removeBalls[i].transform.localScale = Vector3.one * 3.5f;
             removeBalls[i].GetComponent<SpriteRenderer>().color = Color.white;
         }
 
@@ -186,7 +186,7 @@ public class GameSystem : MonoBehaviour
         //未追加のボールであれば追加する
         if (removeBalls.Contains(ball) == false)
         {
-            ball.transform.localScale = Vector3.one * 3 * 1.4f;　//ボールの大きさを大きくする
+            ball.transform.localScale = Vector3.one * 3.5f * 1.4f;　//ボールの大きさを大きくする
             ball.GetComponent<SpriteRenderer>().color = Color.yellow;　//ボールの色を変える
             removeBalls.Add(ball);
             //SEを鳴らす
