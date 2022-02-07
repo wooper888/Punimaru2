@@ -25,6 +25,15 @@ public class Title : MonoBehaviour
     //SoundSettingButtonを設定する枠
     [SerializeField] GameObject soundSettingPanel = default;
 
+    //ハイスコアパネルを表示するための枠
+    [SerializeField] GameObject highScorePanel = default;
+
+    //ハイスコアを入れる枠
+    [SerializeField] Text highScoreText = default;
+
+    //ハイスコア
+    int highScore;
+
     //スタートボタンを押下したらゲームシーンに遷移
     public void OnStartButton()
     {
@@ -99,5 +108,41 @@ public class Title : MonoBehaviour
     public void OnCloseSoundPanelButton()
     {
         soundSettingPanel.SetActive(false);
+    }
+
+    //SoundOnButtonを押下した時
+    public void OnSoundOnButton()
+    {
+        SoundManager.instance.OnSoundOnButton();
+
+    }
+
+    //SoundOffButtonを押下した時
+    public void OnSoundOffButton()
+    {
+        SoundManager.instance.OnSoundOffButton();
+
+    }
+
+    //ハイスコアボタンを押下したらHighScorePanelを表示する
+    public void OnHighScoreButton()
+    {
+        highScorePanel.SetActive(true);
+        highScore = PlayerPrefs.GetInt("SCORE", 0);
+        highScoreText.text = highScore.ToString();
+    }
+
+    //ハイスコアのとじるボタンを押下したらSoundSettingPanelを閉じる
+    public void OnCloseHighScorePanelButton()
+    {
+        highScorePanel.SetActive(false);
+    }
+
+    //ハイスコアのDeleteボタンを押下したらハイスコアをクリア
+    public void OnDeleteButton()
+    {
+        PlayerPrefs.DeleteKey("SCORE");
+        highScore = PlayerPrefs.GetInt("SCORE", 0);
+        highScoreText.text = highScore.ToString();
     }
 }

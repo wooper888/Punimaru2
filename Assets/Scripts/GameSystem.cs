@@ -25,6 +25,9 @@ public class GameSystem : MonoBehaviour
     //スコアを入れる枠
     [SerializeField] Text scoreText = default;
 
+    //ハイスコア
+    int highScore;
+
     //ポイントエフェクトのPrefabを入れる枠
     [SerializeField] GameObject pointEffectPrefab = default;
 
@@ -50,8 +53,9 @@ public class GameSystem : MonoBehaviour
     void Start()
     {
         SoundManager.instance.PlayBGM(SoundManager.BGM.GameSceneBGM);
-        timeCount = 30; //タイマーの初期値
+        timeCount = 10; //タイマーの初期値
         score = 0; //スコアの初期化
+        highScore = PlayerPrefs.GetInt("SCORE", 0);
         AddScore(0); //スコアの表示
         StartCoroutine(ballGenerator.Spawns(ParamsSO.Entity.initBallCount)); //初期のボール生成
         StartCoroutine(CountDown()); //カウントダウンタイマー
@@ -81,6 +85,13 @@ public class GameSystem : MonoBehaviour
         {
             //ドラッグ中の時
             OnDragging();
+        }
+
+        if (highScore < score)
+        {
+            highScore = score;
+            PlayerPrefs.SetInt("SCORE", highScore);
+            PlayerPrefs.Save();
         }
     }
 
@@ -125,7 +136,7 @@ public class GameSystem : MonoBehaviour
             if (ball.id == currentDraggingBall.id)
             {
                 float distance = Vector2.Distance(ball.transform.position, currentDraggingBall.transform.position);
-                if (distance < 1.2f)
+                if (distance < 1.5f)
                 {
                     AddRemoveBall(ball);
                 }
@@ -136,6 +147,7 @@ public class GameSystem : MonoBehaviour
     //ドラッグ終了
     void OnDragEnd()
     {
+
         //リストに追加したボールを削除する
         int removeCount = removeBalls.Count; //リストに追加したボールの数を数えるc
 
@@ -281,6 +293,9 @@ public class GameSystem : MonoBehaviour
         //ゲームオーバーの判定をtrueにする
         gameOver = true;
 
+        //0.5秒待つ
+        yield return new WaitForSeconds(0.5f);
+
         //リザルトパネルを表示する
         resultPanel.SetActive(true);
     }
@@ -320,7 +335,7 @@ public class GameSystem : MonoBehaviour
     {
         SceneManager.LoadScene("TitleScene");
         SoundManager.instance.PlayBGM(SoundManager.BGM.TitleSceneBGM);
-        gameOver = false; //Update関数内を有効に戻す
+     //   gameOver = false; //Update関数内を有効に戻す
         Time.timeScale = 1;
     }
 
